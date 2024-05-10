@@ -11,7 +11,7 @@ namespace Pankratova
     {
         static void Main(string[] args)
         {
-            double xLeft = 0; double xRight=3;
+            /*double xLeft = 0; double xRight = 3;
             double h = 0.0001;
             List<double> y1 = new List<double>();
             List<double> y2 = new List<double>();
@@ -20,107 +20,150 @@ namespace Pankratova
             y1.Add(2);
             y2.Add(2);
 
-            /*y1.Add(f1ans(xLeft));
-            y2.Add(f2ans(xLeft));*/
-            y1Ans.Add(f1ans(xLeft));
-            y2Ans.Add(f2ans(xLeft));
+            y1Ans.Add(F1TestFinal(xLeft));
+            y2Ans.Add(F2TestFinal(xLeft));
 
-            List<double>xList=new List<double>();
-            for (double eta = xLeft; eta< xRight; eta += h)
+            List<double> xList = new List<double>();
+            for (double eta = xLeft; eta < xRight; eta += h)
             {
-                /*double k11 = f1(y1.Last(), y2.Last(), eta);
-                double k12 = f2(y1.Last(), y2.Last(), eta);
+                double k11 = F1(y1.Last(), y2.Last());
+                double k12 = F2(y1.Last(), eta);
 
-                double k21 = f1(y1.Last() + h * k11 / 3, y2.Last() + h * k12 / 3, eta + h / 3);
-                double k22 = f2(y1.Last() + h * k11 / 3, y2.Last() + h * k12 / 3, eta + h / 3);
+                double k21 = F1(y1.Last() + h * k11 / 3, y2.Last() + h * k12 / 3);
+                double k22 = F2(y1.Last() + h * k11 / 3, eta + h / 3);
 
-                double k31 = f1(y1.Last() - h * k11 / 3 + h * k21, y2.Last() - h * k12 / 3 + h * k22, eta + 2 * h / 3);
-                double k32 = f2(y1.Last() - h * k11 / 3 + h * k21, y2.Last() - h * k12 / 3 + h * k22, eta + 2 * h / 3);
+                double k31 = F1(y1.Last() - h * k11 / 3 + h * k21, y2.Last() - h * k12 / 3 + h * k22);
+                double k32 = F2(y1.Last() - h * k11 / 3 + h * k21, eta + 2 * h / 3);
 
-                double k41 = f1(y1.Last() + h * k11 - h * k21 + h * k31, y2.Last() + h * k12 - h * k22 + h * k32, eta + h);
-                double k42 = f2(y1.Last() + h * k11 - h * k12 + h * k31, y2.Last() + h * k12 - h * k22 + h * k32, eta + h);*/
+                double k41 = F1(y1.Last() + h * k11 - h * k21 + h * k31, y2.Last() + h * k12 - h * k22 + h * k32);
+                double k42 = F2(y1.Last() + h * k11 - h * k21 + h * k31, eta + h);
 
-                double k11 = f1(y1.Last(), y2.Last());
-                double k12 = f2(y1.Last(), eta);
-
-                double k21 = f1(y1.Last() + h * k11 / 3, y2.Last() + h * k12 / 3);
-                double k22 = f2(y1.Last() + h * k11 / 3, eta + h / 3);
-
-                double k31 = f1(y1.Last() - h * k11 / 3 + h * k21, y2.Last() - h * k12 / 3 + h * k22);
-                double k32 = f2(y1.Last() - h * k11 / 3 + h * k21, eta + 2 * h / 3);
-
-                double k41 = f1(y1.Last() + h * k11 - h * k21 + h * k31, y2.Last() + h * k12 - h * k22 + h * k32);
-                double k42 = f2(y1.Last() + h * k11 - h * k21 + h * k31, eta + h);
-
-
-
-
-
-                y1.Add(nextY(k11, k21, k31, k41, y1.Last(), h));
-                y2.Add(nextY(k12, k22, k32, k42, y2.Last(), h));
-                y1Ans.Add(f1ans(eta));
-                y2Ans.Add(f2ans(eta));
+                y1.Add(NextY(k11, k21, k31, k41, y1.Last(), h));
+                y2.Add(NextY(k12, k22, k32, k42, y2.Last(), h));
+                y1Ans.Add(F1TestFinal(eta));
+                y2Ans.Add(F2TestFinal(eta));
                 xList.Add(eta);
             }
             ScottPlot.Plot plot = new ScottPlot.Plot();
-            plot.Add.Scatter(xList.ToArray(),y1.ToArray());
-            /*plot.Add.Scatter(xList.ToArray(), y1Ans.ToArray());*/
-            /*plot.SavePng("GraphY1.png",2560,1440);*/
-            /*plot=new ScottPlot.Plot();*/
-            plot.Add.Scatter(xList.ToArray(),y2.ToArray());
-            /*plot.Add.Scatter(xList.ToArray(), y2Ans.ToArray());*/
-            plot.SavePng("Graph.png", 2560, 1440);
-            /*Console.Write("y1: ");
-            foreach(var y in y1)
-            {
-                Console.Write(y.ToString());
-            }
-            Console.Write("\n\nГотовое y1: ");
-            foreach (var y in y1Ans)
-            {
-                Console.Write(y.ToString());
-            }
-            Console.Write("\n\ny2: ");
-            foreach(var y in y2)
-            {
-                Console.Write(y.ToString());
-            }
-            Console.Write("\n\nГотовое y2: ");
-            foreach (var y in y2Ans)
-            {
-                Console.Write(y.ToString());
-            }
-            Console.Read();*/
+            plot.Add.Scatter(xList.ToArray(), y1.ToArray());
+            plot.Add.Scatter(xList.ToArray(), y2.ToArray());
+            plot.SavePng("Graph.png", 2560, 1440);*/
+            DoErrorGraphs();
         }
 
-        /*static double f1(double y1, double y2, double x)
+        static double F1Test(double y1, double y2, double x)
         {
             return y1 + 1 / y2 - Math.Exp(x);
         }
-        static double f2(double y1, double y2, double x)
+        static double F2Test(double y1, double y2, double x)
         {
             return y2 - 1 / y1 - Math.Exp(-x);
-        }*/
+        }
 
-        static double f1(double x1, double x2)
+        static double F1(double x1, double x2)
         {
             return x2 - (x1 * (Math.Pow(x1, 2) / 3 - 1));
         }
-        static double f2(double x1, double eta)
+        static double F2(double x1, double eta)
         {
             return -eta * x1;
         }
-        static double f1ans(double x)
+        static double F1TestFinal(double x)
         {
             return Math.Exp(x);
         }
-        static double f2ans(double x) 
-        {  
-            return Math.Exp(-x); 
-        }
-        static double nextY(double k1, double k2, double k3, double k4, double prevY,double h)
+        static double F2TestFinal(double x)
         {
-            return prevY+h*(k1+3*k2+3*k3+k4)/8;
+            return Math.Exp(-x);
+        }
+        static double NextY(double k1, double k2, double k3, double k4, double prevY, double h)
+        {
+            return prevY + h * (k1 + 3 * k2 + 3 * k3 + k4) / 8;
+        }
+        static void DoErrorGraphs()
+        {
+            double xLeft = 0; double xRight = 3;
+            List<double> Err1 = new List<double>();
+            List<double> Err2 = new List<double>();
+            List<double> ErrH1 = new List<double>();
+            List<double> ErrH2 = new List<double>();
+
+            List<double> xList = new List<double>();
+            for (double h = 0.01; h >= 0.0001; h = h / 1.1)
+            {
+                List<double> y1 = new List<double>();
+                List<double> y2 = new List<double>();
+                List<double> y1Ans = new List<double>();
+                List<double> y2Ans = new List<double>();
+
+                y1.Add(F1TestFinal(0));
+                y2.Add(F2TestFinal(0));
+                y1Ans.Add(F1TestFinal(0));
+                y2Ans.Add(F2TestFinal(0));
+
+                xList.Add(h);
+
+                for (double x = xLeft+h; x < xRight; x += h)
+                {
+                    double k11 = F1Test(y1.Last(), y2.Last(), x);
+                    double k12 = F2Test(y1.Last(), y2.Last(), x);
+
+                    double k21 = F1Test(y1.Last() + h * k11 / 3, y2.Last() + h * k12 / 3, x + h / 3);
+                    double k22 = F2Test(y1.Last() + h * k11 / 3, y2.Last() + h * k12 / 3, x + h / 3);
+
+                    double k31 = F1Test(y1.Last() - h * k11 / 3 + h * k21, y2.Last() - h * k12 / 3 + h * k22, x + 2 * h / 3);
+                    double k32 = F2Test(y1.Last() - h * k11 / 3 + h * k21, y2.Last() - h * k12 / 3 + h * k22, x + 2 * h / 3);
+
+                    double k41 = F1Test(y1.Last() + h * k11 - h * k21 + h * k31, y2.Last() + h * k12 - h * k22 + h * k32, x + h);
+                    double k42 = F2Test(y1.Last() + h * k11 - h * k21 + h * k31, y2.Last() + h * k12 - h * k22 + h * k32, x + h);
+
+                    y1.Add(NextY(k11, k21, k31, k41, y1.Last(), h));
+                    y2.Add(NextY(k12, k22, k32, k42, y2.Last(), h));
+                    y1Ans.Add(F1TestFinal(x));
+                    y2Ans.Add(F2TestFinal(x));
+                }
+
+                double y1Delta=double.MinValue;
+                for (int i = 0; i < y1.Count; i++)
+                {
+                    if (Math.Abs(y1[i] - y1Ans[i])>y1Delta)
+                    {
+                        y1Delta = Math.Abs(y1[i] - y1Ans[i]);
+                    }
+                }
+                Err1.Add(y1Delta);
+                ErrH1.Add(y1Delta / Math.Pow(h, 4));
+
+                double y2Delta = double.MinValue;
+                for (int i = 0; i < y2.Count; i++)
+                {
+                    if (Math.Abs(y2[i] - y2Ans[i]) > y2Delta)
+                    {
+                        y2Delta = Math.Abs(y2[i] - y2Ans[i]);
+                    }
+                }
+                Err2.Add(y2Delta);
+                ErrH2.Add(y2Delta / Math.Pow(h, 4));
+            }
+
+            Console.WriteLine($"Error for y1:{Err1}\nError/h^4 for y1:{ErrH1}\n\nError for y2:{Err2}\nError/h^4 for y2:{ErrH2}\n\nList of H for reference:{xList}");
+            Console.ReadLine();
+
+            ScottPlot.Plot plot = new ScottPlot.Plot();
+            plot.Add.Scatter(xList.ToArray(), Err1.ToArray());
+            plot.SavePng("ErrorGraphY1.png", 2560, 1440);
+
+            plot=new ScottPlot.Plot();
+            plot.Add.Scatter(xList.ToArray(),ErrH1.ToArray());
+            plot.SavePng("ErrorH4GraphY1.png",2560,1440);
+
+            plot=new ScottPlot.Plot();
+            plot.Add.Scatter(xList.ToArray(),ErrH2.ToArray());
+            plot.SavePng("ErrorH4GraphY2.png",2560,1440);
+
+            plot = new ScottPlot.Plot();
+            plot.Add.Scatter(xList.ToArray(), Err2.ToArray());
+            plot.SavePng("ErrorGraphY2.png", 2560, 1440);
         }
     }
 }
