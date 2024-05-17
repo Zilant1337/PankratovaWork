@@ -13,7 +13,7 @@ namespace Pankratova
     {
         static void Main(string[] args)
         {
-            double xLeft = 0; double xRight = 3;
+            double xLeft = 0.001; double xRight = 0.2;
             double h = 0.0001;
             List<double> y1 = new List<double>();
             List<double> y2 = new List<double>();
@@ -21,9 +21,6 @@ namespace Pankratova
             List<double> y2Ans = new List<double>();
             y1.Add(2);
             y2.Add(2);
-
-            y1Ans.Add(F1TestFinal(xLeft));
-            y2Ans.Add(F2TestFinal(xLeft));
 
             List<double> xList = new List<double>();
             for (double eta = xLeft; eta < xRight; eta += h)
@@ -42,8 +39,6 @@ namespace Pankratova
 
                 y1.Add(NextY(k11, k21, k31, k41, y1.Last(), h));
                 y2.Add(NextY(k12, k22, k32, k42, y2.Last(), h));
-                y1Ans.Add(F1TestFinal(eta));
-                y2Ans.Add(F2TestFinal(eta));
                 xList.Add(eta);
             }
             ScottPlot.Plot plot = new ScottPlot.Plot();
@@ -87,8 +82,7 @@ namespace Pankratova
             double xLeft = 0; double xRight = 3;
             List<double> Err1 = new List<double>();
             List<double> Err2 = new List<double>();
-            List<double> ErrH1 = new List<double>();
-            List<double> ErrH2 = new List<double>();
+
 
             List<double> xList = new List<double>();
             for (double h = 0.01; h >= 0.0001; h = h / 1.1)
@@ -134,7 +128,6 @@ namespace Pankratova
                     }
                 }
                 Err1.Add(y1Delta);
-                ErrH1.Add(y1Delta / Math.Pow(h, 4));
 
                 double y2Delta = double.MinValue;
                 for (int i = 0; i < y2.Count; i++)
@@ -145,23 +138,11 @@ namespace Pankratova
                     }
                 }
                 Err2.Add(y2Delta);
-                ErrH2.Add(y2Delta / Math.Pow(h, 4));
             }
-
-            Console.WriteLine($"Error for y1:{Err1}\nError/h^4 for y1:{ErrH1}\n\nError for y2:{Err2}\nError/h^4 for y2:{ErrH2}\n\nList of H for reference:{xList}");
-            Console.ReadLine();
 
             ScottPlot.Plot plot = new ScottPlot.Plot();
             plot.Add.Scatter(xList.ToArray(), Err1.ToArray());
             plot.SavePng("ErrorGraphY1.png", 2560, 1440);
-
-            plot=new ScottPlot.Plot();
-            plot.Add.Scatter(xList.ToArray(),ErrH1.ToArray());
-            plot.SavePng("ErrorH4GraphY1.png",2560,1440);
-
-            plot=new ScottPlot.Plot();
-            plot.Add.Scatter(xList.ToArray(),ErrH2.ToArray());
-            plot.SavePng("ErrorH4GraphY2.png",2560,1440);
 
             plot = new ScottPlot.Plot();
             plot.Add.Scatter(xList.ToArray(), Err2.ToArray());
