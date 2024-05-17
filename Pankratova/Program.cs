@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 using ScottPlot;
 
 namespace Pankratova
@@ -11,7 +13,7 @@ namespace Pankratova
     {
         static void Main(string[] args)
         {
-            /*double xLeft = 0; double xRight = 3;
+            double xLeft = 0; double xRight = 3;
             double h = 0.0001;
             List<double> y1 = new List<double>();
             List<double> y2 = new List<double>();
@@ -47,10 +49,10 @@ namespace Pankratova
             ScottPlot.Plot plot = new ScottPlot.Plot();
             plot.Add.Scatter(xList.ToArray(), y1.ToArray());
             plot.Add.Scatter(xList.ToArray(), y2.ToArray());
-            plot.SavePng("Graph.png", 2560, 1440);*/
+            plot.SavePng("Graph.png", 2560, 1440);
+            GetTestGraphs();
             DoErrorGraphs();
         }
-
         static double F1Test(double y1, double y2, double x)
         {
             return y1 + 1 / y2 - Math.Exp(x);
@@ -164,6 +166,56 @@ namespace Pankratova
             plot = new ScottPlot.Plot();
             plot.Add.Scatter(xList.ToArray(), Err2.ToArray());
             plot.SavePng("ErrorGraphY2.png", 2560, 1440);
+        }
+        static void GetTestGraphs()
+        {
+            double xLeft = 0; double xRight = 3;
+            double h = 0.0001;
+            List<double> y1 = new List<double>();
+            List<double> y2 = new List<double>();
+            List<double> y1Ans = new List<double>();
+            List<double> y2Ans = new List<double>();
+
+            y1.Add(F1TestFinal(0));
+            y2.Add(F2TestFinal(0));
+            y1Ans.Add(F1TestFinal(0));
+            y2Ans.Add(F2TestFinal(0));
+            List<double> xList = new List<double>();
+
+            for (double eta = xLeft; eta < xRight; eta += h)
+            {
+                double k11 = F1Test(y1.Last(), y2.Last(), eta);
+                double k12 = F2Test(y1.Last(), y2.Last(), eta);
+
+                double k21 = F1Test(y1.Last() + h * k11 / 3, y2.Last() + h * k12 / 3, eta + h / 3);
+                double k22 = F2Test(y1.Last() + h * k11 / 3, y2.Last() + h * k12 / 3, eta + h / 3);
+
+                double k31 = F1Test(y1.Last() - h * k11 / 3 + h * k21, y2.Last() - h * k12 / 3 + h * k22, eta + 2 * h / 3);
+                double k32 = F2Test(y1.Last() - h * k11 / 3 + h * k21, y2.Last() - h * k12 / 3 + h * k22, eta + 2 * h / 3);
+
+                double k41 = F1Test(y1.Last() + h * k11 - h * k21 + h * k31, y2.Last() + h * k12 - h * k22 + h * k32, eta + h);
+                double k42 = F2Test(y1.Last() + h * k11 - h * k21 + h * k31, y2.Last() + h * k12 - h * k22 + h * k32, eta + h);
+
+                y1.Add(NextY(k11, k21, k31, k41, y1.Last(), h));
+                y2.Add(NextY(k12, k22, k32, k42, y2.Last(), h));
+                y1Ans.Add(F1TestFinal(eta));
+                y2Ans.Add(F2TestFinal(eta));
+                xList.Add(eta);
+            }
+            ScottPlot.Plot plot = new ScottPlot.Plot();
+            plot.Add.Scatter(xList.ToArray(), y1.ToArray());
+            plot.Add.Scatter(xList.ToArray(), y1Ans.ToArray());
+            plot.SavePng("TestGraphsY1.png", 2560, 1440);
+            plot = new ScottPlot.Plot();
+            plot.Add.Scatter(xList.ToArray(), y2.ToArray());
+            plot.Add.Scatter(xList.ToArray(), y2Ans.ToArray());
+            plot.SavePng("TestGraphsY2.png", 2560, 1440);
+            plot = new ScottPlot.Plot();
+            plot.Add.Scatter(xList.ToArray(), y1.ToArray());
+            plot.Add.Scatter(xList.ToArray(), y1Ans.ToArray());
+            plot.Add.Scatter(xList.ToArray(), y2.ToArray());
+            plot.Add.Scatter(xList.ToArray(),y2Ans.ToArray());
+            plot.SavePng("TestGraphs.png", 2560, 1440);
         }
     }
 }
